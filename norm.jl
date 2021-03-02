@@ -8,5 +8,5 @@ end
 if length(x) > n
     println("Too many numbers input")
 else
-        println(norm(x))
+    println(norm(x))
 end
