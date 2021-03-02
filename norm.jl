@@ -1,6 +1,12 @@
-readInt() :: Int = parse(Int,readline() |> chomp)
-norm(x :: Vector{Int}) :: Float64 = x.^2 |> sum |> sqrt
+norm(x) = x.^2 |> sum |> sqrt
 
-n = readInt()
-x = [readInt() for i in 1:n]
-println(norm(x))
+n = parse(Int, readline() |> chomp)
+x = Vector{Int}()
+while length(x) < n
+    append!(x, parse.(Int, split(readline(), r" |,")))
+end
+if length(x) > n
+    println("Too many numbers input")
+else
+        println(norm(x))
+end
