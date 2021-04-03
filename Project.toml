@@ -1,6 +1,6 @@
 name = "gps"
 uuid = "4ce7606c-1bb5-4da1-9def-55850bdf6bd7"
-authors = ["Calvin Lee <calvins.lee@utah.edu>"]
+authors = ["Calvin Lee <calvins.lee@utah.edu>", "Cole Perschon <cschon@cs.utah.edu>"]
 version = "0.1.0"
 
 [deps]
