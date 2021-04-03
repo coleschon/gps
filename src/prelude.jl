@@ -34,12 +34,11 @@ Given a radian value convert to degrees, minutes and seconds.
 
 The inverse of `dms2rad`.
 """
-function rad2dms(α::Real)::Tuple{Integer,Integer,Integer}
+function rad2dms(α::Real)::Tuple{Integer,Integer,Real}
     α = α*360/(2*π)
-    d = Int(α)
-    m = Int((α-d)*60)
-    s = Int(((α-d)*60-s)*60)
-    (d,m,s)
+    d = Int(floor(α))
+    m = Int(floor((α-d)*60))
+    (d,m,(((α-d)*60-m)*60))
 end
 
 # TODO use Givens?
