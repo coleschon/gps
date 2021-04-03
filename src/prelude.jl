@@ -25,7 +25,7 @@ function dms2rad(d::Integer, m::Integer=0, s::Real=0)::Real
     elseif s >= 60
         error("s > 60");
     end
-    (d + (m + s / 60) / 60)*2*π/360
+    (d + (m + s / 60) / 60)*2*pi_val/360
 end
 
 """
@@ -35,7 +35,7 @@ Given a radian value convert to degrees, minutes and seconds.
 The inverse of `dms2rad`.
 """
 function rad2dms(α::Real)::Tuple{Integer,Integer,Real}
-    α = α*360/(2*π)
+    α = α*360/(2*pi_val)
     d = Int(floor(α))
     m = Int(floor((α-d)*60))
     (d,m,(((α-d)*60-m)*60))
@@ -47,10 +47,6 @@ end
 Generates a 3d "roll" rotation matrix about the z axis by `α` radians
 """
 rot_z(α::Real)::Matrix{<:Real} = [cos(α) -sin(α) 0; sin(α) cos(α) 0; 0 0 1]
-
-# TODO replace with dat
-R = 6.3674445e06
-s = 8.616408999999999651e04 
 
 """
    ll2cart(ψ, λ, h, t=0)
@@ -69,7 +65,7 @@ function cart2ll(coords::Coordinates, t::Real=0.0)::Tuple{Real,Real,Real}
     validatecoords(coords)
     if t != 0.0
         # undo rotation of earth
-        coords = rot_z(-2*π*t/s)*coords
+        coords = rot_z(-2*pi_val*t/s)*coords
     end
     n = LinearAlgebra.norm(coords)
     (atan(coords[3],LinearAlgebra.norm(coords[1:2])),atan(coords[2],coords[1]),n-R)

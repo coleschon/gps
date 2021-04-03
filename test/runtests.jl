@@ -3,5 +3,5 @@ using Test
 
 @testset "gps.jl" begin
     include("testprelude.jl")
-    # Write your tests here.
+    include("testdata.jl")
 end

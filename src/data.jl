@@ -1,4 +1,4 @@
-pi = 3.141592653589793116e00
+pi_val = 3.141592653589793116e00
 c = 2.997924580000000000e08 # speed of light, [m/s]
 R = 6.367444500000000000e06 # radius of earth, [m]
 s = 8.616408999999999651e04 # length of a sidereal day, [s]
@@ -244,6 +244,3 @@ s20 = [s20_u1, s20_u2, s20_u3, s20_v1, s20_v2, s20_v3, s20_per, s20_alt, s20_pha
 s21 = [s21_u1, s21_u2, s21_u3, s21_v1, s21_v2, s21_v3, s21_per, s21_alt, s21_pha]
 s22 = [s22_u1, s22_u2, s22_u3, s22_v1, s22_v2, s22_v3, s22_per, s22_alt, s22_pha]
 s23 = [s23_u1, s23_u2, s23_u3, s23_v1, s23_v2, s23_v3, s23_per, s23_alt, s23_pha]
-
-
-
