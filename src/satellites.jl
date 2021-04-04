@@ -55,7 +55,7 @@ const s22 = Sat([s22_u1, s22_u2, s22_u3], [s22_v1, s22_v2, s22_v3], s22_per, s22
 const s23 = Sat([s23_u1, s23_u2, s23_u3], [s23_v1, s23_v2, s23_v3], s23_per, s23_alt, s23_pha)
 
 
-export satellites, position
+export Sat, satellites, position
 
 const satellites = [s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23]
 
