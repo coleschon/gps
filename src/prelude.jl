@@ -25,7 +25,7 @@ function dms2rad(d::Integer, m::Integer=0, s::Real=0)::Real
     elseif s >= 60
         error("s > 60");
     end
-    (d + (m + s / 60) / 60)*2*pi_val/360
+    (d + (m + s / 60) / 60)*2*π/360
 end
 
 """
@@ -35,7 +35,7 @@ Given a radian value convert to degrees, minutes and seconds.
 The inverse of `dms2rad`.
 """
 function rad2dms(α::Real)::Tuple{Integer,Integer,Real}
-    α = α*360/(2*pi_val)
+    α = α*360/(2*π)
     d = Int(floor(α))
     m = Int(floor((α-d)*60))
     (d,m,(((α-d)*60-m)*60))
@@ -65,7 +65,7 @@ function cart2ll(coords::Coordinates, t::Real=0.0)::Tuple{Real,Real,Real}
     validatecoords(coords)
     if t != 0.0
         # undo rotation of earth
-        coords = rot_z(-2*pi_val*t/s)*coords
+        coords = rot_z(-2*π*t/s)*coords
     end
     n = LinearAlgebra.norm(coords)
     (atan(coords[3],LinearAlgebra.norm(coords[1:2])),atan(coords[2],coords[1]),n-R)
