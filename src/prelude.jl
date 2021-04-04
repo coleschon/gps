@@ -61,7 +61,6 @@ Convert Cartesian coordinates into latitude, longitude and height
 The inverse of `ll2cart`
 """
 function cart2ll(coords::Coordinates, t::Real=0.0)::Tuple{Real,Real,Real}
-    # TODO replace with dat
     validatecoords(coords)
     if t != 0.0
         # undo rotation of earth

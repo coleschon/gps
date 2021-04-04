@@ -12,9 +12,9 @@
     # at time t=0 we should be able to convert to cartesian coordinates and back
     @test all(cart2ll(ll2cart(b12...)) .≈ b12)
     # likewise at noon
-    @test all(cart2ll(ll2cart(b12..., 43200), 43200) .≈ b12)
+    @test all(cart2ll(ll2cart(b12..., s/2), s/2) .≈ b12)
     # but it should be in a different location at noon
-    @test !all(ll2cart(b12...) .≈ ll2cart(b12..., 43200))
+    @test !all(ll2cart(b12...) .≈ ll2cart(b12..., s/2))
     # and at the same location at 1 sidereal day
-    @test all(ll2cart(b12...) .≈ ll2cart(b12...,8.616408999999999651e04))
+    @test all(ll2cart(b12...) .≈ ll2cart(b12...,s))
 end
