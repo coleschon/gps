@@ -12,5 +12,6 @@ makedocs(
 # See "Hosting Documentation" and deploydocs() in the Documenter manual
 # for more information.
 deploydocs(
-    repo = "github.com/coleschon/gps.git"
+    repo = "github.com/coleschon/gps.git",
+    devbranch = "main"
 )
