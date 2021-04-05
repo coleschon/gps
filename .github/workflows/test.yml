@@ -1,0 +1,4 @@
+name: Run tests
+
+on: [push, pull_request]
+uses: julia-actions/julia-runtest@v1
