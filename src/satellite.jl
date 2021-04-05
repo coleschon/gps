@@ -1,8 +1,140 @@
 using gps
-using LinearAlgebra
-using gps.Satellite
-const pi = gps.pi
-const π = gps.pi
+#using LinearAlgebra
+#using gps.Satellite
+#const pi = gps.pi
+#const π = gps.pi
+
+pi = 0 # pi
+π  = 0 # pi
+c  = 0 # speed of light, [m/s]
+R  = 0 # radius of earth, [m]
+s  = 0 # length of a sidereal day, [s]
+
+
+struct Sat
+    u::Coordinates
+    v::Coordinates
+    periodicity::Real
+    altitude::Real
+    phase::Real
+    Sat(u,v,p,a,θ) = begin
+        validatecoords(u,v)
+	new(u,v,p,a,θ)
+    end
+end
+satellites = Vector{Sat}(undef,24)
+function Base.getproperty(x::Sat, s::Symbol)
+    if s===:θ
+        getfield(x, :phase)
+    elseif s===:h
+        getfield(x, :altitude)
+    elseif s===:p
+        getfield(x, :periodicity)
+    else
+        getfield(x, s)
+    end
+end
+
+
+"""
+    read_data(data)
+"""
+function read_data(args)
+    if length(args) < 1
+        println(stderr, "Please enter data file!") # TODO - error printout formatting
+	exit(1);
+    end
+    open(args[1]) do f
+        line = 1
+	satellite = 0
+	setprecision(256)
+	while ! eof(f)
+	    str = readline(f)
+	    str = lstrip(str, [' '])
+	    str = split(str)
+
+	    if line < 5
+	        if line == 1
+		    pi = parse(BigFloat, str[1])
+		    π = parse(BigFloat, str[1])
+		elseif line == 2
+		    c = parse(BigFloat, str[1])
+		elseif line == 3
+		    R = parse(BigFloat, str[1])
+		else
+		    s = parse(BigFloat, str[1])
+		end
+		#println(str[1])
+		#println(parse(BigFloat, str[1]))
+		line +=1
+	    else
+		u1 = parse(BigFloat, str[1])
+		#println(str[1])
+		#println(parse(BigFloat, str[1]))
+		str = readline(f)
+		str = lstrip(str, [' '])
+		str = split(str)
+		u2 = parse(BigFloat, str[1])
+		#println(str[1])
+		#println(parse(BigFloat, str[1]))
+		str = readline(f)
+		str = lstrip(str, [' '])
+		str = split(str)
+		u3 = parse(BigFloat, str[1])
+		#println(str[1])
+		#println(parse(BigFloat, str[1]))
+		str = readline(f)
+		str = lstrip(str, [' '])
+		str = split(str)
+		v1 = parse(BigFloat, str[1])
+		#println(str[1])
+		#println(parse(BigFloat, str[1]))
+		str = readline(f)
+		str = lstrip(str, [' '])
+		str = split(str)
+		v2 = parse(BigFloat, str[1])
+		#println(str[1])
+		#println(parse(BigFloat, str[1]))
+		str = readline(f)
+		str = lstrip(str, [' '])
+		str = split(str)
+		v3 = parse(BigFloat, str[1])
+		#println(str[1])
+		#println(parse(BigFloat, str[1]))
+		str = readline(f)
+		str = lstrip(str, [' '])
+		str = split(str)
+		periodicity = parse(BigFloat, str[1])
+		#println(str[1])
+		#println(parse(BigFloat, str[1]))
+		str = readline(f)
+		str = lstrip(str, [' '])
+		str = split(str)
+		altitude = parse(BigFloat, str[1])
+		#println(str[1])
+		#println(parse(BigFloat, str[1]))
+		str = readline(f)
+		str = lstrip(str, [' '])
+		str = split(str)
+		phase = parse(BigFloat, str[1])
+		#println(str[1])
+		#println(parse(BigFloat, str[1]))
+
+                u = [u1, u2, u3]
+		v = [v1, v2, v3]
+                sat = Sat(u,v,periodicity,altitude,phase)		
+		satellites[satellite+1] = sat
+		satellite +=1
+            end
+	end
+    end
+end
+
+read_data(ARGS)
+export pi, π, c, R, s, satellites
+exit()
+
+
 
 """
     satloc(sat, ℓ, t)
@@ -25,7 +157,7 @@ end
     overhorizon(x,s)
 returns true iff `s` is over the horizon of `x`.
 """
-overhorizon(xv::Coordinates, s::Coordinates)::Bool = xv⋅(xv-s)>0
+function overhorizon(xv::Coordinates, s::Coordinates)::Bool = xv⋅(xv-s)>0
 
 setprecision(128)
 

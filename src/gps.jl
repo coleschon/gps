@@ -1,11 +1,11 @@
 module gps
 
 export Coordinates, validatecoords, dms2rad, rad2dms, ll2cart, cart2ll, abovehorizon
-export Newton
+#export Newton
 
-include("data.jl")
+#include("data.jl")
 include("prelude.jl")
-include("satellites.jl")
-include("newton.jl")
+#include("satellites.jl")
+#include("newton.jl")
 
 end
