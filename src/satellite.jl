@@ -1,48 +1,54 @@
+module Satellite
 using gps
-using LinearAlgebra
-using gps.Satellite
-const pi = gps.pi
-const π = gps.pi
+const π = gps.π
 
-"""
-    satloc(sat, ℓ, t)
-Find the cartesian coordinates and time of the satellite such that its
-broadcast at that location will reach coordinates `ℓ` at time `t`.
-"""
-function satloc(sat::Sat, xv::Coordinates, tv::Real)::Tuple{Coordinates,<:Real}
-    # This function should have a root at the time we desire
-    function f(t::Real)::Real
-        Δx = Satellite.position(sat,t)-xv
-        Δx⋅Δx-c^2*(tv-t)^2
+struct Sat
+    u::Coordinates
+    v::Coordinates
+    periodicity::Real
+    altitude::Real
+    phase::Real
+    Sat(u,v,p,a,θ) = begin
+        validatecoords(u,v)
+        new(u,v,p,a,θ)
     end
-    # We start our search at the current vehicle time, assuming it will be rather close
-    # Furthermore our δ must be less than .01m/c in order to have 1cm accuracy
-    t = Newton.newton(f, tv, δ=BigFloat(.01)/c)
-    Satellite.position(sat, t), t
+end
+# add some nice tersity to access
+function Base.getproperty(x::Sat, s::Symbol)
+    if s===:θ
+        getfield(x, :phase)
+    elseif s===:h
+        getfield(x, :altitude)
+    elseif s===:p
+        getfield(x, :periodicity)
+    else 
+        getfield(x, s)
+    end
 end
 
-"""
-    overhorizon(x,s)
-returns true iff `s` is over the horizon of `x`.
-"""
-overhorizon(xv::Coordinates, s::Coordinates)::Bool = xv⋅(xv-s)>0
-
-setprecision(128)
-
-for line in eachline()
-    parsedms(dms)::BigFloat =
-        parse(Int,dms[4])*dms2rad(parse.(Int,dms[1:2])...,parse(BigFloat,dms[3]))
-    splitline = split(line)
-    t=parse(BigFloat, splitline[1])
-    ψ=parsedms(splitline[2:5])
-    λ=parsedms(splitline[6:9])
-    h=parse(BigFloat, splitline[10])
-    #println(line, " → ", (t,ψ,λ,h))
-    ℓ = ll2cart(ψ,λ,h,t)
-    for (is, sat) in enumerate(Satellite.satellites)
-        xs, ts = satloc(sat, ℓ, t)
-        if overhorizon(ℓ, xs)
-            println(is, ' ', ts, ' ', xs) 
-        end
+open(DATA_FILE) do f
+    lines = map(s -> :(BigFloat($(split(s)[1]))), readlines(f))
+    sats=[]
+    for i in 5:9:length(lines)
+        ex = :(Sat([$(lines[i:i+2]...)],
+                   [$(lines[i+3:i+5]...)],
+                   $(lines[i+6]),
+                   $(lines[i+7]),
+                   $(lines[i+8])))
+        push!(sats, ex)
     end
+    eval(:(const satellites = [$(sats...)]))
+end
+
+export Sat, satellites, position
+
+"""
+    positions(s, t)
+Returns the position of the satellite `s` at time `t`.
+"""
+function position(s::Sat, t::Real)::Coordinates
+    α=2*π*t/s.p+s.θ
+    (R+s.h)*(cos(α)*s.u+sin(α)*s.v)
+end
+
 end

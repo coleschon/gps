@@ -1,5 +1,6 @@
-import LinearAlgebra
+using LinearAlgebra
 
+export validatecoords, rad2dms, dms2rad, ll2cart, cart2ll, abovehorizon
 Coordinates=Vector{<:Real}
 """
     validatecoords(x...)
