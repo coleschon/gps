@@ -1,4 +1,18 @@
 name: Run tests
 
-on: [push, pull_request]
-uses: julia-actions/julia-runtest@v1
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        julia-version: ['1.5.3', 'nightly']
+    steps:
+      - uses: actions/checkout@v2
+      - uses: julia-actions/setup-julia@latest
+        with:
+          version: ${{ matrix.julia-version }}
+      - name: Install dependencies
+        run: julia --project=@. -e 'using Pkg; Pkg.instantiate()'
+      - name: Run Tests
+        run: julia --project=@. test/runtests.jl 
