@@ -1,4 +1,4 @@
-# prelude
+# Prelude
 
 Functions visible to the entire gps project
 
